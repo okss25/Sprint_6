@@ -1,6 +1,9 @@
 import allure
+from locators.order_page_locators import OrderPageLocators
+from page_objects.base_page import BasePage
+import allure
 
-from helper import generate_date_rent
+from helpers import generate_date_rent
 from locators.order_page_locators import OrderPageLocators
 from pages.base_page import BasePage
 

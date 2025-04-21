@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 class OrderPageLocators:
 
     # окно информации о клиенте
+
     title_order_page = By.XPATH, '//div[text()="Для кого самокат"]'
     input_name = By.XPATH, '//input[@placeholder="* Имя"]'
     input_last_name = By.XPATH, '//input[@placeholder="* Фамилия"]'

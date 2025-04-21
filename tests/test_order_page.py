@@ -3,7 +3,7 @@ import pytest
 
 from conftest import driver
 from data import comment, TestUrl
-from helper import info_client, about_scooter_rent
+from helpers import info_client, about_scooter_rent
 from locators.main_page_locators import MainPageLocators
 from pages.main_page import MainPage
 from pages.order_page import OrderPage
