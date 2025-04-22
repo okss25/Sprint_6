@@ -1,89 +1,53 @@
 import allure
 from locators.order_page_locators import OrderPageLocators
-from page_objects.base_page import BasePage
-import allure
-
-from helpers import generate_date_rent
-from locators.order_page_locators import OrderPageLocators
 from pages.base_page import BasePage
+from data import TestData
 
 
 class OrderPage(BasePage):
 
-    @allure.step('Заполняем поле Имя')
-    def fill_in_input_name(self, name):
-        return self.add_text_to_element(OrderPageLocators.input_name, name)
+    @allure.step('Кликнуть по предлагаемому варианту в выпадающем списке станций метро')
+    def select_station(self):
+        self.click_on_element(OrderPageLocators.select_item_in_dropdown_metro)
 
-    @allure.step('Заполняем поле Фамилия')
-    def fill_in_input_last_name(self, last_name):
-        return self.add_text_to_element(OrderPageLocators.input_last_name, last_name)
+    @allure.step('Ввести дату заказа в инпут "Когда привезти самокат"')
+    def send_keys_date_by_keyboard_input(self):
+        self.send_keys_to_input(OrderPageLocators.input_date).send_keys(TestData.test_data_user1[5])
 
-    @allure.step('Заполняем поле Адресс')
-    def fill_in_input_address(self, address):
-        return self.add_text_to_element(OrderPageLocators.input_address, address)
+    @allure.step('Кликнуть по выбранной дате в выпадающем календаре поля ввода даты начала аренды')
+    def click_date_in_calendar(self):
+        self.click_on_element(OrderPageLocators.calendar_item)
 
-    @allure.step('Заполняем поле Метро')
-    def fill_in_input_metro(self, metro):
-        return self.add_text_to_element(OrderPageLocators.input_metro, metro)
+    @allure.step('Проверить отображение кнопки "Посмотреть статус" после создания заказа')
+    def check_displaying_of_button_check_status_of_order(self):
+        return self.check_displaying_of_element(OrderPageLocators.button_check_status_of_order)
 
-    @allure.step('Выбираем метро из списка')
-    def click_from_element_list_metro(self, metro):
-        locator_metro = self.format_locators(OrderPageLocators.metro_lst_element, metro)
-        return self.click_to_element(locator_metro)
+    @allure.step('Заполнение первой части формы и нажатие кнопки "Далее"')
+    def data_entry_first_form(self, test_data):
+        self.wait_visibility_of_element(OrderPageLocators.input_name)
+        self.click_on_element(OrderPageLocators.input_name)
+        self.send_keys_to_input(OrderPageLocators.input_name, test_data[0])
+        self.click_on_element(OrderPageLocators.input_lastname)
+        self.send_keys_to_input(OrderPageLocators.input_lastname, test_data[1])
+        self.click_on_element(OrderPageLocators.input_address)
+        self.send_keys_to_input(OrderPageLocators.input_address, test_data[2])
+        self.click_on_element(OrderPageLocators.input_metro)
+        self.send_keys_to_input(OrderPageLocators.input_metro, test_data[3])
+        self.click_on_element(OrderPageLocators.select_item_in_dropdown_metro)
+        self.click_on_element(OrderPageLocators.input_phone)
+        self.send_keys_to_input(OrderPageLocators.input_phone, test_data[4])
+        self.click_on_element(OrderPageLocators.button_next)
 
-    @allure.step('Заполняем поле Телефон')
-    def fill_in_input_phone(self, phone):
-        return self.add_text_to_element(OrderPageLocators.input_phone, phone)
-
-    @allure.step('Заполняем Форму Для кого самокат')
-    def fill_form_about_info_client(self, name, last_name, address, metro, phone):
-        self.fill_in_input_name(name)
-        self.fill_in_input_last_name(last_name)
-        self.fill_in_input_address(address)
-        self.fill_in_input_metro(metro)
-        self.click_from_element_list_metro(metro)
-        self.fill_in_input_phone(phone)
-        self.click_to_element(OrderPageLocators.button_next)
-
-    @allure.step('Заполняем поле Когда привезти самокат')
-    def fill_in_input_date_rent(self):
-        rent_date = generate_date_rent()
-        day = rent_date.split('.')[0]
-        self.add_text_to_element(OrderPageLocators.input_date_rent, rent_date)
-        day_calendare_locator = self.format_locators(OrderPageLocators.date_calendar_element, day)
-        return self.click_to_element(day_calendare_locator)
-
-    @allure.step('Заполняем поле Срок аренды')
-    def fill_in_input_count_rent_day(self, rent_day):
-        self.click_to_element(OrderPageLocators.input_count_rent_day)
-        locator_count_rent_day = self.format_locators(OrderPageLocators.list_count_rent_day, rent_day)
-        return self.click_to_element(locator_count_rent_day)
-
-
-    @allure.step('Выбираем чек-бокс')
-    def fill_in_checkbox_colour(self, colour):
-        scooter_colour = self.format_locators(OrderPageLocators.checkbox_colour, colour)
-        return self.click_to_element(scooter_colour)
-
-    @allure.step('Заполняем поле Комментарий')
-    def fill_in_comment_input(self,comment):
-        return self.add_text_to_element(OrderPageLocators.input_comment, comment)
-
-    @allure.step('Заполняем форму Про аренду')
-    def fill_form_about_rent(self, rent_day, colour, comment):
-        self.fill_in_input_date_rent()
-        self.fill_in_input_count_rent_day(rent_day)
-        self.fill_in_checkbox_colour(colour)
-        self. fill_in_comment_input(comment)
-
-    @allure.step('Нажимаем на кнопку заказать в форме')
-    def click_button_order_finall(self):
-        self.click_to_element(OrderPageLocators.button_finall_order)
-
-    @allure.step('Подтверждаем заказ')
-    def confirmation_order(self):
-        self.click_to_element(OrderPageLocators.button_order_confirmation)
-
-    @allure.step('Получаем подтверждение об оформленном заказе')
-    def check_accept_order(self):
-        return self.get_text_from_element(OrderPageLocators.title_order_add)
+    @allure.step('Заполнение второй части формы и окно подтверждения')
+    def data_entry_second_form(self, test_data):
+        self.wait_visibility_of_element(OrderPageLocators.input_date)
+        self.click_on_element(OrderPageLocators.input_date)
+        self.send_keys_to_input(OrderPageLocators.input_date, test_data[5])
+        self.click_on_element(OrderPageLocators.checkbox_grey_color_scooter)
+        self.click_on_element(OrderPageLocators.field_rental_period)
+        self.click_on_element(OrderPageLocators.dropdown_item_rental_period)
+        self.click_on_element(OrderPageLocators.input_comment)
+        self.send_keys_to_input(OrderPageLocators.input_comment, test_data[6])
+        self.click_on_element(OrderPageLocators.button_make_order)
+        self.wait_visibility_of_element(OrderPageLocators.button_yes_confirm_order)
+        self.click_on_element(OrderPageLocators.button_yes_confirm_order)

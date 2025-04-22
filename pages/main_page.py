@@ -1,51 +1,58 @@
 import allure
 from locators.main_page_locators import MainPageLocators
-from locators.order_page_locators import OrderPageLocators
 from pages.base_page import BasePage
 
 
 class MainPage(BasePage):
 
-    @allure.step('Открываем главную страницу')
-    def open(self):
-        from data import TestUrl
-        self.driver.get(TestUrl.MAIN_URL)  # использовать TestUrl.MAIN_URL
+    @allure.step('Подождать прогрузки кнопки "Заказать" в хэдере')
+    def wait_visibility_of_order_button_in_header(self):
+        self.wait_visibility_of_element(MainPageLocators.order_button_in_header)
 
-    @allure.step('Принимаем куки')
-    def accept_cookie(self):
-        self.click_to_element(MainPageLocators.button_cookie)
+    @allure.step('Кликнуть по кнопке "Заказать" в хэдере')
+    def click_on_order_button_in_header(self):
+        self.click_on_element(MainPageLocators.order_button_in_header)
 
-    @allure.step('Кликаем по кнопке Заказать вверху страницы')
-    def click_order_button_up(self):
-        self.click_to_element(MainPageLocators.order_button_up)
+    @allure.step('Подождать прогрузки части лого с надписью "Самокат" в хэдере')
+    def wait_visibility_of_header_logo_scooter(self):
+        self.wait_visibility_of_element(MainPageLocators.header_logo_scooter)
 
-    @allure.step('Кликаем по кнопке Заказать внизу страницы')
-    def click_order_button_down(self):
-        self.click_to_element(MainPageLocators.order_button_down)
+    @allure.step('Подождать прогрузки части лого с надписью "Яндекс" в хэдере')
+    def wait_visibility_of_header_logo_yandex(self):
+        self.wait_visibility_of_element(MainPageLocators.header_logo_yandex)
 
-    @allure.step('Проверка, что страница заказа открыта')
-    def is_order_page_opened(self):
-        # Предполагается, что у вас есть локатор для заголовка страницы заказа
-        return self.is_element_visible(OrderPageLocators.title_order_page)
+    @allure.step('Кликнуть по части лого с надписью "Самокат" в хэдере')
+    def click_on_header_logo_scooter(self):
+        self.click_on_element(MainPageLocators.header_logo_scooter)
 
-    @allure.step('Получение текста ответа на вопрос')
-    def get_answer_text(self, question_id):
-        locator_answer = self.format_locators(MainPageLocators.answer_locator, question_id)
-        self.scroll_for_question_block()
-        return self.get_text_from_element(locator_answer)
+    @allure.step('Кликнуть по части лого с надписью "Яндекс" в хэдере')
+    def click_on_header_logo_yandex(self):
+        self.click_on_element(MainPageLocators.header_logo_yandex)
 
-    @allure.step('Проверяем ответ на вопрос')
-    def check_answer_for_question(self, question_id):
-        self.click_for_question(question_id)
-        return self.get_answer_text(question_id)
+    @allure.step('Подождать прогрузки отображения заголовка главной страницы')
+    def wait_visibility_of_main_header(self):
+        self.wait_visibility_of_element(MainPageLocators.main_header)
 
-    @allure.step('Прокручиваем страницу до последнего вопроса')
-    def scroll_for_question_block(self):
-        last_question = self.find_element_with_wait(MainPageLocators.question_locator_for_scroll)
-        self.scroll_for_element(last_question)
+    @allure.step('Проверить отображение заголовка главной страницы')
+    def check_displaying_of_main_header(self):
+        return self.check_displaying_of_element(MainPageLocators.main_header)
 
-    @allure.step('Клик на вопрос')
-    def click_for_question(self, question_id):
-        locator_question = self.format_locators(MainPageLocators.question_locator, question_id)
-        self.scroll_for_question_block()
-        self.click_to_element(locator_question)
+    @allure.step('Проскроллить до секции "Вопросы о важном"')
+    def scroll_to_faq_section(self):
+        self.scroll_to_element(MainPageLocators.faq_section)
+
+    @allure.step('Подождать прогрузки нужного номера вопроса в аккордеоне "Вопросы о важнoм"')
+    def wait_visibility_of_faq_items(self, data):
+        self.wait_visibility_of_element(MainPageLocators.faq_questions_items[data])
+
+    @allure.step('Кликнуть на нужный номер вопроса в аккордеоне "Вопросы о важнoм"')
+    def click_on_faq_items(self, data):
+        self.click_on_element(MainPageLocators.faq_questions_items[data])
+
+    @allure.step('Подождать прогрузки нужного номера ответа в аккордеоне "Вопросы о важнoм"')
+    def wait_visibility_of_faq_answer(self, data):
+        self.wait_visibility_of_element(MainPageLocators.faq_answers_items[data])
+
+    @allure.step('Получить текст нужного номера ответа в аккордеоне "Вопросы о важнoм"')
+    def get_displayed_text_from_faq_answer(self, data):
+        return self.get_text_on_element(MainPageLocators.faq_answers_items[data])
