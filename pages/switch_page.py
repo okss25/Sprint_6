@@ -1,5 +1,4 @@
 import allure
-
 from locators.switch_page_locators import SwitchPageLocators
 from pages.base_page import BasePage
 
